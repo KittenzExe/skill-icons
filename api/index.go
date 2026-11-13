@@ -182,6 +182,8 @@ func contains(arr []string, str string) bool {
 	return false
 }
 
+const rootText = "This is a self hosted fork of Skillicons by LelouchFR, hosted by KittenzExe. This is only the api, if you need to use the builder, visit: https://go-skill-icons.netlify.app/build then change the link to be https://skillicons.exe.gay"
+
 func iconRoute(r *gin.RouterGroup) {
 	r.GET("/icons", func(ctx *gin.Context) {
 

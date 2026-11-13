@@ -13,7 +13,7 @@ RUN sed -i \
   -e '/func init() {/,/^}/d' \
   -e '/func Handler(/,/^}/d' \
   api/index.go && \
-  printf '\nfunc main() {\n  gin.SetMode(gin.ReleaseMode)\n  app := gin.New()\n  r := app.Group("/api")\n  iconRoute(r)\n\n  decoder := json.NewDecoder(strings.NewReader(iconsJSON))\n  if err := decoder.Decode(&icons); err != nil {\n    panic(err)\n  }\n\n  for key := range icons {\n    iconNameList = append(iconNameList, strings.Split(key, "-")[0])\n    if strings.Contains(key, "-light") || strings.Contains(key, "-dark") || strings.Contains(key, "-auto") {\n      themedIcons = append(themedIcons, strings.Split(key, "-")[0])\n    }\n  }\n\n  app.Run()\n}\n' >> api/index.go
+  printf '\nfunc main() {\n  gin.SetMode(gin.ReleaseMode)\n  app := gin.New()\n  app.GET("/", func(c *gin.Context) {\n    c.String(http.StatusOK, rootText)\n  })\n  r := app.Group("/api")\n  iconRoute(r)\n\n  decoder := json.NewDecoder(strings.NewReader(iconsJSON))\n  if err := decoder.Decode(&icons); err != nil {\n    panic(err)\n  }\n\n  for key := range icons {\n    iconNameList = append(iconNameList, strings.Split(key, "-")[0])\n    if strings.Contains(key, "-light") || strings.Contains(key, "-dark") || strings.Contains(key, "-auto") {\n      themedIcons = append(themedIcons, strings.Split(key, "-")[0])\n    }\n  }\n\n  app.Run()\n}\n' >> api/index.go
 
 RUN go mod tidy
 RUN go run build.go
