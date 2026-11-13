@@ -15,8 +15,6 @@ var icons map[string]string = make(map[string]string)
 var iconNameList []string
 var themedIcons []string
 
-
-
 var shortNames = map[string]string{
 	"js":                "javascript",
 	"ts":                "typescript",
@@ -93,8 +91,8 @@ var shortNames = map[string]string{
 	"arc":               "arcbrowser",
 	"hf":                "huggingface",
 	"sqla":              "sqlalchemy",
-    "notepad++":         "notepadpp",
-    "jq":                "jqlang",
+	"notepad++":         "notepadpp",
+	"jq":                "jqlang",
 }
 
 var (
@@ -117,28 +115,28 @@ func generateSvg(iconNames []string, perLine int, hasTitlesEnabled bool, align s
 	length := int(math.Min(float64(perLine*300), float64(len(iconNames)*300))) - 44
 	height := int(math.Ceil(float64(len(iconSvgList))/float64(perLine)))*300 - 44
 	scaledHeight := int(float64(height) * SCALE)
-    scaledWidth := int(float64(length) * SCALE)
+	scaledWidth := int(float64(length) * SCALE)
 
-    var svg string
-    if align == "center" {
-        svg = fmt.Sprintf(`
+	var svg string
+	if align == "center" {
+		svg = fmt.Sprintf(`
             <svg width="100%%" height="%d" viewBox="0 0 %d %d" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
         `, scaledHeight, length, height)
-    } else if align == "right" {
-        svg = fmt.Sprintf(`
+	} else if align == "right" {
+		svg = fmt.Sprintf(`
             <svg width="calc(200%% - %dpx)" height="%d" viewBox="0 0 %d %d" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
         `, scaledWidth, scaledHeight, length, height)
-    } else {
-        svg = fmt.Sprintf(`
+	} else {
+		svg = fmt.Sprintf(`
             <svg width="%d" height="%d" viewBox="0 0 %d %d" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
         `, scaledWidth, scaledHeight, length, height)
-    }
+	}
 
 	for index, i := range iconSvgList {
-        var title string
-        if hasTitlesEnabled {
-            title = fmt.Sprintf("<title>%s</title>", iconNames[index])
-        }
+		var title string
+		if hasTitlesEnabled {
+			title = fmt.Sprintf("<title>%s</title>", iconNames[index])
+		}
 
 		x := (index % perLine) * 300
 		y := (index / perLine) * 300
@@ -200,18 +198,18 @@ func iconRoute(r *gin.RouterGroup) {
 			perLineStr = "15"
 		}
 
-        hasTitles := ctx.Request.Form.Get("titles")
-        var hasTitlesEnabled bool
-        if hasTitles == "" {
-            hasTitlesEnabled = false
-        } else {
-            hasTitlesEnabled = true
-        }
+		hasTitles := ctx.Request.Form.Get("titles")
+		var hasTitlesEnabled bool
+		if hasTitles == "" {
+			hasTitlesEnabled = false
+		} else {
+			hasTitlesEnabled = true
+		}
 
-        align := ctx.Request.Form.Get("align")
-        if align != "left" && align != "right" && align != "center" {
-            align = "left"
-        }
+		align := ctx.Request.Form.Get("align")
+		if align != "left" && align != "right" && align != "center" {
+			align = "left"
+		}
 
 		if iconParam == "" {
 			ctx.String(http.StatusBadRequest, "You didn't specify any icons!")

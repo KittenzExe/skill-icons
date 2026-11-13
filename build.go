@@ -50,8 +50,19 @@ func main() {
 	// Split the content by newlines
 	lines := strings.Split(indexContent, "\n")
 
-	// Insert the iconsJSON into line 18
-	lines[17] = fmt.Sprintf("\n\tvar iconsJSON = `%s`\n", iconsJSON)
+	// Insert after the themedIcons declaration; a fixed line breaks when gofmt removes blank lines
+	anchor := -1
+	for i, line := range lines {
+		if strings.TrimSpace(line) == "var themedIcons []string" {
+			anchor = i
+			break
+		}
+	}
+	if anchor < 0 {
+		panic("anchor 'var themedIcons []string' not found in api/index.go")
+	}
+	jsonLine := fmt.Sprintf("\nvar iconsJSON = `%s`\n", iconsJSON)
+	lines = append(lines[:anchor+1], append([]string{jsonLine}, lines[anchor+1:]...)...)
 
 	// Join the lines back into a single string
 	modifiedContent := strings.Join(lines, "\n")
